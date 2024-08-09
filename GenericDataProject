@@ -1,0 +1,1375 @@
+#include <iostream>
+using namespace std;
+
+/////////////////////////////////////////////////////////
+//
+//
+//code of Singly Linear
+//
+//
+//////////////////////////////////////////////////////////////
+template<class T>
+struct nodeSL {
+    T data;
+    struct nodeSL *next;
+};
+
+template<class T>
+class SinglyLL {
+private:
+    struct nodeSL<T>* First;
+    int iCount;
+public:
+    SinglyLL();
+
+    void Display();
+    int Count();
+
+    void InsertFirst(T No);
+    void InsertLast(T No);
+    void InsertAtPos(T No, int iPos);
+
+    void DeleteFirst();
+    void DeleteLast();
+    void DeleteAtPos(int iPos);
+};
+template<class T>
+SinglyLL<T>::SinglyLL() {
+    cout << "Inside Constructor\n";
+    First = NULL;
+    iCount = 0;
+}
+template<class T>
+void SinglyLL<T>::Display() {
+    struct nodeSL<T>* temp = First;
+
+    while (temp != NULL) {
+        cout << "| " << temp->data << "|-> ";
+        temp = temp->next;
+    }
+    cout << "NULL\n";
+}
+template<class T>
+int SinglyLL<T>::Count() {
+    return iCount;
+}
+template<class T>
+void SinglyLL<T>::InsertFirst(T No) {
+    struct nodeSL<T>* newn = NULL;
+
+    newn = new  struct nodeSL<T>;    // malloc
+
+    newn->data = No;
+    newn->next = NULL;
+
+    if (First == NULL) // if(iCount == 0)
+    {
+        First = newn;
+    }
+    else {
+        newn->next = First;
+        First = newn;
+    }
+    iCount++;
+}
+template<class T>
+void SinglyLL<T>::InsertLast(T No) {
+    struct nodeSL<T>* newn = NULL;
+    struct nodeSL<T>* temp = First;
+
+    newn = new struct nodeSL<T>;    // malloc
+
+    newn->data = No;
+    newn->next = NULL;
+
+    if (First == NULL) // if(iCount == 0)
+    {
+        First = newn;
+    }
+    else {
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = newn;
+    }
+    iCount++;
+}
+template<class T>
+void SinglyLL<T>::InsertAtPos(T No, int iPos) {
+    struct nodeSL<T>* newn = NULL;
+    int i = 0;
+    struct nodeSL<T>* temp;
+
+    if ((iPos < 1) || (iPos > iCount + 1)) {
+        cout << "Invalid position\n";
+        return;
+    }
+
+    if (iPos == 1) {
+        InsertFirst(No);
+    }
+    else if (iPos == iCount + 1) {
+        InsertLast(No);
+    }
+    else {
+        temp = First;
+
+        newn = new  struct nodeSL<T>;
+        newn->data = No;
+        newn->next = NULL;
+
+        for (i = 1; i < iPos - 1; i++) {
+            temp = temp->next;
+        }
+
+        newn->next = temp->next;
+        temp->next = newn;
+        iCount++;
+    }
+}
+template<class T>
+void SinglyLL<T>::DeleteFirst() {
+    struct nodeSL<T>* temp = First;
+
+    if (First == NULL) {
+        cout << "LL is empty\n";
+        return;
+    }
+    else if (First->next == NULL) {
+        delete First;
+        First = NULL;
+    }
+    else {
+        First = First->next;
+        delete temp;
+    }
+    iCount--;
+}
+template<class T>
+void SinglyLL<T>::DeleteLast() {
+    struct nodeSL<T>* temp = First;
+
+    if (First == NULL) {
+        cout << "LL is empty\n";
+        return;
+    }
+    else if (First->next == NULL) {
+        delete First;
+        First = NULL;
+    }
+    else {
+        while (temp->next->next != NULL) {
+            temp = temp->next;
+        }
+        delete temp->next;
+        temp->next = NULL;
+    }
+    iCount--;
+}
+template<class T>
+void SinglyLL<T>::DeleteAtPos(int iPos) {
+    int i = 0;
+    struct nodeSL<T>* temp1;
+    struct nodeSL<T>* temp2;
+
+    if ((iPos < 1) || (iPos > iCount)) {
+        cout << "Invalid position\n";
+        return;
+    }
+
+    if (iPos == 1) {
+        DeleteFirst();
+    }
+    else if (iPos == iCount) {
+        DeleteLast();
+    }
+    else {
+        temp1 = First;
+
+        for (i = 1; i < iPos - 1; i++) {
+            temp1 = temp1->next;
+        }
+
+        temp2 = temp1->next;
+
+        temp1->next = temp2->next;
+        delete temp2;
+
+        iCount--;
+    }
+}
+/////////////////////////////////////////
+//
+//              Singly Circular
+//
+///////////////////////////////////////////////
+template<class T>
+struct nodeSC {
+    T data;
+    struct nodeSC *next;
+};
+
+template<class T>
+class SinglyCL {
+public:
+    T  iCount;
+    struct nodeSC<T>* First;
+    struct nodeSC<T>* Last;
+
+
+    SinglyCL();
+
+    void Display();
+    int Count();
+
+
+
+    void InsertFirst(T  No);
+    void InsertLast(T  No);
+    void InsertAtPos(T  No, int iPos);
+
+    void DeleteFirst();
+    void DeleteLast();
+    void DeleteAtPos(int iPos);
+
+};
+template<class T>
+SinglyCL<T>::SinglyCL() {
+    First = NULL;
+    Last = NULL;
+    iCount = 0;
+}
+template<class T>
+void SinglyCL<T>::Display() {
+    struct nodeSC<T>* temp = First;
+    if (First != NULL) {
+        do {
+            cout << "<=>|" << temp->data << "|";
+            temp = temp->next;
+        } while (temp != Last->next);
+    }
+    cout << "<=>" << endl;
+}
+template<class T>
+int SinglyCL<T>::Count() {
+    return iCount;
+}
+template<class T>
+void SinglyCL<T>::InsertFirst(T No) {
+    struct nodeSC<T>* newn = NULL;
+    newn = new struct nodeSC<T>;
+
+    newn->data = No;
+    newn->next = NULL;
+
+    if (First == NULL) {
+        First = newn;
+        Last = newn;
+    }
+    else {
+        newn->next = First;
+        First = newn;
+    }
+    Last->next = First;
+    iCount++;
+}
+template<class T>
+void SinglyCL<T>::InsertLast(T No) {
+    struct nodeSC<T>* newn = NULL;
+    struct nodeSC<T>* temp = NULL;
+
+    newn = new struct nodeSC<T>;
+
+    newn->data = No;
+    newn->next = NULL;
+
+    if (First == NULL) {
+        First = newn;
+        Last = newn;
+    }
+    else {
+        newn->next = First;
+        Last->next = newn;
+        Last = newn;
+    }
+    Last->next = First;
+
+    iCount++;
+}
+template<class T>
+void SinglyCL<T>::InsertAtPos(T No, int iPos) {
+    struct nodeSC<T>* newn = NULL;
+    struct nodeSC<T>* temp = NULL;
+    int i = 0;
+    int iLength = Count();
+
+    if (iPos<1 || iPos>iLength + 1) {
+        cout << "Invalid position\n";
+        return;
+    }
+    if (iPos == 1) {
+        InsertFirst(No);
+    }
+    else if (iPos == iLength + 1) {
+        InsertLast(No);
+    }
+    else {
+        temp = First;
+        newn = new struct nodeSC<T>;
+        newn->data = No;
+        newn->next = NULL;
+
+        for (i = 1; i<iPos - 1; i++) {
+            temp = temp->next;
+        }
+        newn->next = temp->next;
+        temp->next = newn;
+        iCount++;
+    }
+
+}
+template<class T>
+void SinglyCL<T>::DeleteFirst() {
+    struct nodeSC<T>* temp = First;
+
+    if (First == NULL) {
+        cout << "LL is empty\n";
+        return;
+    }
+    else if (First == Last) {
+        delete First;
+        First = NULL;
+        Last = NULL;
+    }
+    else {
+        First = First->next;
+        delete temp;
+        Last->next = First;
+    }
+    iCount--;
+}
+template<class T>
+void SinglyCL<T>::DeleteLast() {
+    struct nodeSC<T>* temp = First;
+    struct nodeSC<T>* temp1 = NULL;
+
+    if (First == NULL) {
+        cout << "LL is empty\n";
+        return;
+    }
+    else if (First == Last) {
+        delete First;
+        First = NULL;
+        Last = NULL;
+    }
+    else {
+        temp = First;
+        while (temp->next != Last) {
+            temp = temp->next;
+        }
+        temp1 = temp->next;
+        temp->next = temp1->next;
+        delete temp1;
+        Last = temp;
+        Last->next = First;
+    }
+    iCount--;
+}
+template<class T>
+void SinglyCL<T>::DeleteAtPos(int iPos) {
+    struct nodeSC<T>* temp = NULL;
+    struct nodeSC<T>* temp1 = NULL;
+    int iLength = Count();
+    int i = 0;
+
+    if (iPos<1 || iPos>iLength) {
+        cout << "Invalid position\n";
+        return;
+    }
+    if (iPos == 1) {
+        DeleteFirst();
+    }
+    else if (iPos == iLength) {
+        DeleteLast();
+    }
+    else {
+        temp = First;
+        for (i = 1; i<iPos - 1; i++) {
+            temp = temp->next;
+        }
+        temp1 = temp->next;
+        temp->next = temp1->next;
+        delete temp1;
+        iCount--;
+    }
+
+}
+//////////////////////////////////////////////////////////
+//
+//      Doubly Linear
+//
+/////////////////////////////////////////////////////////
+template<class T>
+struct nodeDL {
+    T data;
+    struct nodeDL *next;
+    struct nodeDL *prev;
+};
+template<class T>
+class DoublyLL {
+public:
+    struct nodeDL<T>* First;
+    int iCount;
+
+    DoublyLL();
+
+    void Display();
+    int Count();
+
+
+
+    void InsertFirst(T No);
+    void InsertLast(T No);
+    void InsertAtPos(T No, int iPos);
+
+    void DeleteFirst();
+    void DeleteLast();
+    void DeleteAtPos(int iPos);
+};
+template<class T>
+DoublyLL<T>::DoublyLL() {
+    First = NULL;
+    iCount = 0;
+}
+template<class T>
+void DoublyLL<T>::Display() {
+    struct nodeDL<T>* temp = First;
+
+    while (temp != NULL) {
+        cout << "<=>|" << temp->data << "|";
+        temp = temp->next;
+    }
+    cout << "<=>NULL" << endl;
+}
+template<class T>
+int DoublyLL<T>::Count() {
+    return iCount;
+}
+template<class T>
+void DoublyLL<T>::InsertFirst(T No) {
+    struct nodeDL<T>* newn = NULL;
+    newn = new struct nodeDL<T>;
+
+    newn->data = No;
+    newn->next = NULL;
+    newn->prev = NULL;
+
+    if (First == NULL) {
+        First = newn;
+    }
+    else {
+        newn->next = First;
+        First->prev = newn;
+        First = newn;
+    }
+    iCount++;
+}
+template<class T>
+void DoublyLL<T>::InsertLast(T No) {
+    struct nodeDL<T>* newn = NULL;
+    newn = new struct nodeDL<T>;
+
+    newn->data = No;
+    newn->next = NULL;
+    newn->prev = NULL;
+
+    if (First == NULL) {
+        First = newn;
+    }
+    else {
+        struct nodeDL<T>* temp = First;
+
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+
+        temp->next = newn;
+        newn->prev = temp;
+    }
+    iCount++;
+}
+template<class T>
+void DoublyLL<T>::InsertAtPos(T No, int iPos) {
+    int i = 0;
+    struct nodeDL<T>* newn = NULL;
+    struct nodeDL<T>* temp = NULL;
+    int iLength = Count();
+
+    if ((iPos<1) || (iPos>iLength + 1)) {
+        cout << "Invalid position\n";
+        return;
+    }
+
+    if (iPos == 1) {
+        InsertFirst(No);
+    }
+    else if (iPos == iLength + 1) {
+        InsertLast(No);
+    }
+    else {
+        newn = new struct nodeDL<T>;
+
+        newn->data = No;
+        newn->next = NULL;
+        newn->prev = NULL;
+
+        temp = First;
+
+        for (i = 1; i<iPos - 1; i++) {
+            temp = temp->next;
+        }
+
+        newn->next = temp->next;
+        newn->prev = temp;
+
+        temp->next = newn;
+        temp->next->prev = newn;
+
+        iCount++;
+    }
+}
+template<class T>
+void DoublyLL<T>::DeleteFirst() {
+    if (First == NULL) {
+        cout << "LL is empty\n";
+        return;
+    }
+    else if (First->next == NULL) {
+        delete First;
+        First = NULL;
+    }
+    else {
+        First = First->next;
+        delete First->prev;
+        First->prev = NULL;
+    }
+    iCount--;
+}
+template<class T>
+void DoublyLL<T>::DeleteLast() {
+    if (First == NULL) {
+        cout << "LL is empty\n";
+        return;
+    }
+    else if (First->next == NULL) {
+        delete First;
+        First = NULL;
+    }
+    else {
+        struct nodeDL<T>* temp = First;
+
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+
+        temp->prev->next = NULL;
+        delete temp;
+    }
+    iCount--;
+}
+template<class T>
+void DoublyLL<T>::DeleteAtPos(int iPos) {
+    int iLength = Count();
+    int i = 0;
+    struct nodeDL<T>* temp = NULL;
+
+    if ((iPos<1) || (iPos>iLength)) {
+        cout << "Invalid position\n";
+        return;
+    }
+
+    if (iPos == 1) {
+        DeleteFirst();
+    }
+    else if (iPos == iLength) {
+        DeleteLast();
+    }
+    else {
+        temp = First;
+
+        for (i = 1; i<iPos - 1; i++) {
+            temp = temp->next;
+        }
+
+        temp->next = temp->next->next;
+        delete temp->next->prev;
+        temp->next->prev = temp;
+
+        iCount--;
+    }
+}
+//////////////////////////////////////////////////////////
+//
+//      Doubly Circular
+//
+/////////////////////////////////////////////////////////
+
+template<class T>
+struct nodeDC {
+    T data;
+    struct nodeDC *next;
+    struct nodeDC *prev;
+};
+
+template<class T>
+class DoublyCL {
+public:
+    int iCount;
+    struct nodeDC<T>* First;
+    struct nodeDC<T>* Last;
+
+    DoublyCL();
+
+    void Display();
+    int Count();
+
+    void InsertFirst(T No);
+    void InsertLast(T No);
+    void InsertAtPos(T No, int iPos);
+
+    void DeleteFirst();
+    void DeleteLast();
+    void DeleteAtPos(int iPos);
+};
+template<class T>
+DoublyCL<T>::DoublyCL() {
+    First = NULL;
+    Last = NULL;
+    iCount = 0;
+}
+template<class T>
+void DoublyCL<T>::Display() {
+    struct nodeDC<T>* temp = First;
+
+    if ((First == NULL) && (Last == NULL)) {
+        return;
+    }
+    do {
+        cout << "| " << temp->data << " |<=> ";
+        temp = temp->next;
+    } while (temp != Last->next);
+
+    cout << endl;
+}
+template<class T>
+int DoublyCL<T>::Count() {
+    return iCount;
+}
+template<class T>
+void DoublyCL<T>::InsertFirst(T No) {
+    struct nodeDC<T>* newn = NULL;
+
+    newn = new struct nodeDC<T>;
+
+    newn->data = No;
+    newn->next = NULL;
+    newn->prev = NULL;
+
+    if ((First == NULL) && (Last == NULL)) {
+        First = newn;
+        Last = newn;
+    }
+    else {
+        newn->next = First;
+        First->prev = newn;
+        First = newn;
+    }
+
+    First->prev = Last;
+    Last->next = First;
+
+    iCount++;
+}
+template<class T>
+void DoublyCL<T>::InsertLast(T No) {
+    struct nodeDC<T>* newn = NULL;
+
+    newn = new struct nodeDC<T>;
+
+    newn->data = No;
+    newn->next = NULL;
+    newn->prev = NULL;
+
+    if ((First == NULL) && (Last == NULL)) {
+        First = newn;
+        Last = newn;
+    }
+    else {
+        Last->next = newn;
+        newn->prev = Last;
+        Last = newn;
+    }
+
+    First->prev = Last;
+    Last->next = First;
+
+    iCount++;
+}
+template<class T>
+void DoublyCL<T>::InsertAtPos(T No, int iPos) {
+    struct nodeDC<T>* newn = NULL;
+    struct nodeDC<T>* temp = NULL;
+    int i = 0;
+
+    if ((iPos<1) || (iPos>iCount + 1)) {
+        cout << "Invalid position\n";
+        return;
+    }
+
+    if (iPos == 1) {
+        InsertFirst(No);
+    }
+    else if (iPos == iCount + 1) {
+        InsertLast(No);
+    }
+    else {
+        temp = First;
+
+        newn = new struct nodeDC<T>;
+
+        newn->data = No;
+        newn->next = NULL;
+        newn->prev = NULL;
+
+        for (i = 1; i<iPos - 1; i++) {
+            temp = temp->next;
+        }
+
+        newn->next = temp->next;
+        newn->next->prev = newn;
+        temp->next = newn;
+        newn->prev = temp;
+
+        iCount++;
+    }
+}
+template<class T>
+void DoublyCL<T>::DeleteFirst() {
+    if ((First == NULL) && (Last == NULL)) {
+        return;
+    }
+    else if (First == Last) {
+        delete First;
+        First = NULL;
+        Last = NULL;
+    }
+    else {
+        First = First->next;
+        delete Last->next;      // free(*Last).next;
+
+        First->prev = Last;
+        Last->next = First;
+    }
+    iCount--;
+}
+template<class T>
+void DoublyCL<T>::DeleteLast() {
+    if ((First == NULL) && (Last == NULL)) {
+        return;
+    }
+    else if (First == Last) {
+        delete First;
+        First = NULL;
+        Last = NULL;
+    }
+    else {
+        Last = Last->prev;
+        delete First->prev;         // free(*First).prev
+
+        First->prev = Last;
+        Last->next = First;
+    }
+    iCount--;
+}
+template<class T>
+void DoublyCL<T>::DeleteAtPos(int iPos) {
+    struct nodeDC<T>* temp = NULL;
+    int i = 0;
+
+    if ((iPos<1) || (iPos>iCount)) {
+        cout << "Invalid position\n";
+        return;
+    }
+
+    if (iPos == 1) {
+        DeleteFirst();
+    }
+    else if (iPos == iCount) {
+        DeleteLast();
+    }
+    else {
+        temp = First;
+
+        for (i = 1; i<iPos - 1; i++) {
+            temp = temp->next;
+        }
+
+        temp->next = temp->next->next;
+        delete temp->next->prev;          // free(temp->next->prev);
+        temp->next->prev = temp;
+
+        iCount--;
+    }
+}
+////////////////////////////////////////////////////////////////
+//
+//            Queue
+//
+///////////////////////////////////////////////////////////////
+template<class T>
+struct nodeQ {
+    T data;
+    struct nodeQ *next;
+};
+
+template<class T>
+class Queue {
+public:
+    struct nodeQ<T>* First;
+    int iCount;
+
+    Queue();
+
+    bool IsQueueEmpty();
+    void Enqueue(T no);   // InsertLast
+    T Dequeue();          // DeleteFirst
+
+    void Display();
+    int Count();
+};
+template<class T>
+Queue<T>::Queue() {
+    First = NULL;
+    iCount = 0;
+}
+template<class T>
+bool Queue<T>::IsQueueEmpty() {
+    if (iCount == 0)
+        return true;
+    else
+        return false;
+}
+template<class T>
+void Queue<T>::Enqueue(T no)   // InsertLast
+{
+    struct nodeQ<T>* newn = new struct nodeQ<T>;
+
+    newn->data = no;
+    newn->next = NULL;
+
+    if (First == NULL) {
+        First = newn;
+    }
+    else {
+        struct nodeQ<T>* temp = First;
+
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = newn;
+    }
+    iCount++;
+}
+template<class T>
+T Queue<T>::Dequeue()          // DeleteFirst
+{
+    if (First == NULL) {
+        cout << "Unable to dequeue as Queue is empty\n";
+        return -1;   // Return a sentinel value indicating failure
+    }
+    else {
+        T value = First->data;
+        struct nodeQ<T>* temp = First;
+
+        First = First->next;
+        delete temp;
+
+        iCount--;
+
+        return value;   // Return the dequeued value
+    }
+}
+template<class T>
+void Queue<T>::Display() {
+    if (First == NULL) {
+        cout << "Queue is empty\n";
+        return;
+    }
+    cout << "Elements of Queue are : \n";
+
+    struct nodeQ<T>* temp = First;
+    while (temp != NULL) {
+        cout << "| " << temp->data << " |-> ";
+        temp = temp->next;
+    }
+    cout << "NULL\n";
+}
+template<class T>
+int Queue<T>::Count() {
+    return iCount;
+}
+/////////////////////////////////////////////////////////////////////
+//
+//      Stack
+//
+//////////////////////////////////////////////////////////////////
+template<class T>
+struct nodeS {
+    T data;
+    struct nodeS *next;
+};
+template<class T>
+class Stack {
+public:
+    struct nodeS<T>* First;
+    int iCount;
+
+    Stack();
+
+    bool IsStackEmpty();
+    void Push(T no);   // InsertFirst
+    T Pop();           // DeleteFirst
+
+    void Display();
+    int Count();
+};
+template<class T>
+Stack<T>::Stack() {
+    First = NULL;
+    iCount = 0;
+}
+template<class T>
+bool Stack<T>::IsStackEmpty() {
+    if (iCount == 0)
+        return true;
+    else
+        return false;
+}
+template<class T>
+void Stack<T>::Push(T no)   // InsertFirst
+{
+    struct nodeS<T>* newn = new struct nodeS<T>;
+
+    newn->data = no;
+    newn->next = NULL;
+
+    if (First == NULL) {
+        First = newn;
+    }
+    else {
+        newn->next = First;
+        First = newn;
+    }
+    iCount++;
+}
+template<class T>
+T Stack<T>::Pop()           // DeleteFirst
+{
+    if (First == NULL) {
+        cout << "Unable to pop the element as Stack is empty\n";
+        return -1;   // Return a sentinel value indicating failure
+    }
+    else {
+        T value = First->data;
+        struct nodeS<T>* temp = First;
+
+        First = First->next;
+        delete temp;
+
+        iCount--;
+
+        return value;   // Return the popped value
+    }
+}
+template<class T>
+void Stack<T>::Display() {
+    if (First == NULL) {
+        cout << "Stack is empty\n";
+        return;
+    }
+    cout << "Elements of Stack are : \n";
+
+    struct nodeS<T>* temp = First;
+    while (temp != NULL) {
+        cout << "| " << temp->data << " |-> ";
+        temp = temp->next;
+    }
+    cout << "NULL\n";
+}
+template<class T>
+int Stack<T>::Count() {
+    return iCount;
+}
+///////////////////////////////////////
+//
+//Main function to handle user interaction
+//
+/////////////////////////////////////////
+void singlyLinearOperations() {
+    SinglyLL<int> sll;
+    int choice, value, pos;
+
+    while (true) {
+        cout << "\nSingly Linear Linked List Operations:\n";
+        cout << "1. Insert First\n";
+        cout << "2. Insert Last\n";
+        cout << "3. Insert at Position\n";
+        cout << "4. Delete First\n";
+        cout << "5. Delete Last\n";
+        cout << "6. Delete at Position\n";
+        cout << "7. Display\n";
+        cout << "8. Count\n";
+        cout << "9. Exit to Main Menu\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter value to insert at first: ";
+                cin >> value;
+                sll.InsertFirst(value);
+                break;
+            case 2:
+                cout << "Enter value to insert at last: ";
+                cin >> value;
+                sll.InsertLast(value);
+                break;
+            case 3:
+                cout << "Enter value and position to insert: ";
+                cin >> value >> pos;
+                sll.InsertAtPos(value, pos);
+                break;
+            case 4:
+                sll.DeleteFirst();
+                break;
+            case 5:
+                sll.DeleteLast();
+                break;
+            case 6:
+                cout << "Enter position to delete: ";
+                cin >> pos;
+                sll.DeleteAtPos(pos);
+                break;
+            case 7:
+                sll.Display();
+                break;
+            case 8:
+                cout << "Number of elements: " << sll.Count() << endl;
+                break;
+            case 9:
+                return;
+            default:
+                cout << "Invalid choice. Try again.\n";
+        }
+    }
+}
+
+void singlyCircularOperations() {
+    SinglyCL<int> scl;
+    int choice, value, pos;
+
+    while (true) {
+        cout << "\nSingly Circular Linked List Operations:\n";
+        cout << "1. Insert First\n";
+        cout << "2. Insert Last\n";
+        cout << "3. Insert at Position\n";
+        cout << "4. Delete First\n";
+        cout << "5. Delete Last\n";
+        cout << "6. Delete at Position\n";
+        cout << "7. Display\n";
+        cout << "8. Count\n";
+        cout << "9. Exit to Main Menu\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter value to insert at first: ";
+                cin >> value;
+                scl.InsertFirst(value);
+                break;
+            case 2:
+                cout << "Enter value to insert at last: ";
+                cin >> value;
+                scl.InsertLast(value);
+                break;
+            case 3:
+                cout << "Enter value and position to insert: ";
+                cin >> value >> pos;
+                scl.InsertAtPos(value, pos);
+                break;
+            case 4:
+                scl.DeleteFirst();
+                break;
+            case 5:
+                scl.DeleteLast();
+                break;
+            case 6:
+                cout << "Enter position to delete: ";
+                cin >> pos;
+                scl.DeleteAtPos(pos);
+                break;
+            case 7:
+                scl.Display();
+                break;
+            case 8:
+                cout << "Number of elements: " << scl.Count() << endl;
+                break;
+            case 9:
+                return;
+            default:
+                cout << "Invalid choice. Try again.\n";
+        }
+    }
+}
+
+void doublyLinearOperations() {
+    DoublyLL<int> dll;
+    int choice, value, pos;
+
+    while (true) {
+        cout << "\nDoubly Linear Linked List Operations:\n";
+        cout << "1. Insert First\n";
+        cout << "2. Insert Last\n";
+        cout << "3. Insert at Position\n";
+        cout << "4. Delete First\n";
+        cout << "5. Delete Last\n";
+        cout << "6. Delete at Position\n";
+        cout << "7. Display\n";
+        cout << "8. Count\n";
+        cout << "9. Exit to Main Menu\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter value to insert at first: ";
+                cin >> value;
+                dll.InsertFirst(value);
+                break;
+            case 2:
+                cout << "Enter value to insert at last: ";
+                cin >> value;
+                dll.InsertLast(value);
+                break;
+            case 3:
+                cout << "Enter value and position to insert: ";
+                cin >> value >> pos;
+                dll.InsertAtPos(value, pos);
+                break;
+            case 4:
+                dll.DeleteFirst();
+                break;
+            case 5:
+                dll.DeleteLast();
+                break;
+            case 6:
+                cout << "Enter position to delete: ";
+                cin >> pos;
+                dll.DeleteAtPos(pos);
+                break;
+            case 7:
+                dll.Display();
+                break;
+            case 8:
+                cout << "Number of elements: " << dll.Count() << endl;
+                break;
+            case 9:
+                return;
+            default:
+                cout << "Invalid choice. Try again.\n";
+        }
+    }
+}
+
+void doublyCircularOperations() {
+    DoublyCL<int> dcl;
+    int choice, value, pos;
+
+    while (true) {
+        cout << "\nDoubly Circular Linked List Operations:\n";
+        cout << "1. Insert First\n";
+        cout << "2. Insert Last\n";
+        cout << "3. Insert at Position\n";
+        cout << "4. Delete First\n";
+        cout << "5. Delete Last\n";
+        cout << "6. Delete at Position\n";
+        cout << "7. Display\n";
+        cout << "8. Count\n";
+        cout << "9. Exit to Main Menu\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter value to insert at first: ";
+                cin >> value;
+                dcl.InsertFirst(value);
+                break;
+            case 2:
+                cout << "Enter value to insert at last: ";
+                cin >> value;
+                dcl.InsertLast(value);
+                break;
+            case 3:
+                cout << "Enter value and position to insert: ";
+                cin >> value >> pos;
+                dcl.InsertAtPos(value, pos);
+                break;
+            case 4:
+                dcl.DeleteFirst();
+                break;
+            case 5:
+                dcl.DeleteLast();
+                break;
+            case 6:
+                cout << "Enter position to delete: ";
+                cin >> pos;
+                dcl.DeleteAtPos(pos);
+                break;
+            case 7:
+                dcl.Display();
+                break;
+            case 8:
+                cout << "Number of elements: " << dcl.Count() << endl;
+                break;
+            case 9:
+                return;
+            default:
+                cout << "Invalid choice. Try again.\n";
+        }
+    }
+}
+
+void queueOperations() {
+    Queue<int> queue;
+    int choice, value;
+
+    while (true) {
+        cout << "\nQueue Operations:\n";
+        cout << "1. Enqueue\n";
+        cout << "2. Dequeue\n";
+        cout << "3. Display\n";
+        cout << "4. Count\n";
+        cout << "5. Exit to Main Menu\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter value to enqueue: ";
+                cin >> value;
+                queue.Enqueue(value);
+                break;
+            case 2:
+                value = queue.Dequeue();
+                if (value != -1)   // Check for sentinel value indicating failure
+                    cout << "Dequeued value: " << value << endl;
+                break;
+            case 3:
+                queue.Display();
+                break;
+            case 4:
+                cout << "Number of elements: " << queue.Count() << endl;
+                break;
+            case 5:
+                return;
+            default:
+                cout << "Invalid choice. Try again.\n";
+        }
+    }
+}
+
+void stackOperations() {
+    Stack<int> stack;
+    int choice, value;
+
+    while (true) {
+        cout << "\nStack Operations:\n";
+        cout << "1. Push\n";
+        cout << "2. Pop\n";
+        cout << "3. Display\n";
+        cout << "4. Count\n";
+        cout << "5. Exit to Main Menu\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter value to push: ";
+                cin >> value;
+                stack.Push(value);
+                break;
+            case 2:
+                value = stack.Pop();
+                if (value != -1)   // Check for sentinel value indicating failure
+                    cout << "Popped value: " << value << endl;
+                break;
+            case 3:
+                stack.Display();
+                break;
+            case 4:
+                cout << "Number of elements: " << stack.Count() << endl;
+                break;
+            case 5:
+                return;
+            default:
+                cout << "Invalid choice. Try again.\n";
+        }
+    }
+}
+
+int main() {
+    int choice;
+
+    while (true) {
+        cout << "\nMain Menu:\n";
+        cout << "1. Singly Linear Linked List Operations\n";
+        cout << "2. Singly Circular Linked List Operations\n";
+        cout << "3. Doubly Linear Linked List Operations\n";
+        cout << "4. Doubly Circular Linked List Operations\n";
+        cout << "5. Queue Operations\n";
+        cout << "6. Stack Operations\n";
+        cout << "7. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                singlyLinearOperations();
+                break;
+            case 2:
+                singlyCircularOperations();
+                break;
+            case 3:
+                doublyLinearOperations();
+                break;
+            case 4:
+                doublyCircularOperations();
+                break;
+            case 5:
+                queueOperations();
+                break;
+            case 6:
+                stackOperations();
+                break;
+            case 7:
+                return 0;
+            default:
+                cout << "Invalid choice. Try again.\n";
+        }
+    }
+
+    return 0;
+}
+
